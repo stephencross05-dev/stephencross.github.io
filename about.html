@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>about.md — stephen@cave</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="vim-window">
+      <div class="titlebar">
+        <span class="left">HP-LNX@stephens_cave:~</span>
+        <span class="center">- /home/stephen/about.md</span>
+        <span class="right">VIM 8.2</span>
+      </div>
+      <main class="buffer">
+        <div class="editor">
+          <aside class="gutter" aria-hidden="true">
+            <span class="ln">1</span>
+            <span class="ln">2</span>
+            <span class="ln">3</span>
+            <span class="ln">4</span>
+            <span class="ln">5</span>
+            <span class="ln">6</span>
+            <span class="ln">7</span>
+            <span class="ln">8</span>
+            <span class="ln">9</span>
+            <span class="ln">10</span>
+            <span class="ln">11</span>
+            <span class="ln">12</span>
+            <span class="ln">13</span>
+            <span class="ln">14</span>
+            <span class="ln">15</span>
+            <span class="ln">16</span>
+            <span class="ln">17</span>
+            <span class="ln">18</span>
+            <span class="ln">19</span>
+            <span class="ln">20</span>
+            <span class="ln">21</span>
+            <span class="ln">22</span>
+            <span class="ln">23</span>
+            <span class="ln">24</span>
+            <span class="ln">25</span>
+            <span class="ln">26</span>
+            <span class="ln">27</span>
+            <span class="ln">28</span>
+            <span class="ln">29</span>
+
+            <span class="tilde">~</span>
+            <span class="tilde">~</span>
+            <span class="tilde">~</span>
+            <span class="tilde">~</span>
+          </aside>
+          <div class="help">
+            <p><span class="tok-comment">// About Me</span></p>
+            <p><span class="tok-keyword">const</span> name = <span class="tok-value">"Stephen Cross"</span>;</p>
+            <p><span class="tok-keyword">struct</span> contact_info {</p>
+              <p style="padding-left:2em"><span class="tok-type">std::string</span> email = <span class="tok-value">"stephencross05@gmail.com"</span>;</p>
+              <p style="padding-left:2em"><span class="tok-type">std::string</span> email_alt = <span class="tok-value">"scross32@gatech.edu"</span>;</p>
+              <p style="padding-left:2em"><span class="tok-type">std::string</span> social = <span class="tok-value"><a href="https://www.linkedin.com/in/stephencross-/" target="_blank" rel="noopener">LinkedIn</a></span>;</p>
+            <p>};</p>
+            <p></p>
+            <p><span class="tok-comment">// Click gallery for some photos</span></p>
+            <p class="hint">/* <a href="gallery.html">Gallery</a> */</p>
+<p><span class="tok-type">char</span> bio[1024] = <span class="tok-value">"</span>
+  My journey into electrical engineering has not followed the traditional route. When I graduated high school I was not
+  keen on attending a four year university. Instead I opted to enter the trades and study motorsports vehicle technology
+  at Lanier Technical College. While at Lanier Tech, I immersed myself in the hands-on application of motorsports vehicle
+  technology. I secured my first motorsports internship at a small Mazda Miata race team, OPM Autosports. There I learned
+  about how the industry worked, and the logistical nightmare that it is to transport 14 cars to tracks across the east
+  coast. After a year at OPM Autosports I found another internship with a higher-end race team, Denton Carden Racing
+  (DCR). It was around this time that I graduated from Lanier Tech and began to work full time as a mechanic and
+  trackside crew member. As I learned more about the motorsports industry, the more it became clear to me that I wanted
+  to keep it as a personal hobby and not a full time job. To have a more fulfilling job and explore what I am really
+  capable of, I decided to go back to school and earn an electrical engineering degree like my father. I enrolled at the
+  University of North Georgia in the Spring of 2023. After four tough semesters of holding a part time job at DCR and
+  working as a full time student, I was admitted into Georgia Tech. Now I commit all my time to the harder classes. With
+  my free time I decided to join the GT crew and get to spend all my weekends rowing on the Chattahoochee River. In the
+  future I plan to graduate and work for one year before returning to school for a master’s degree. I am interested in
+  antenna design and want to find a career working in the telecommunications industry, especially satellite
+  communications.
+</p>
+<p><span class="tok-value">";</span></p>
+<p> </p>
+
+<p> </p>
+            <p><span class="tok-comment">// Click to return </span></p>
+            <p class="hint">/* <a href="index.html">Back</a> */</p>
+          </div>
+        </div>
+      </main>
+      <div class="statusbar">
+        <div class="modes" role="group" aria-label="Color scheme">
+          <button class="scheme-btn" data-scheme="default">Default</button>
+          <button class="scheme-btn" data-scheme="desert">Desert</button>
+          <button class="scheme-btn" data-scheme="industry">Industry</button>
+        </div>
+        <span class="file">/home/stephen/about.md</span>
+        <span class="pos">Ln 1, Col 1</span>
+      </div>
+    </div>
+    <script>
+      // color scheme switcher: toggles body class and persists choice in localStorage
+      (function(){
+        const btns = Array.from(document.querySelectorAll('.scheme-btn'));
+        const storageKey = 'site:schema';
+        function applyScheme(name){
+          document.body.classList.remove('scheme-default','scheme-desert','scheme-industry');
+          if (name && name !== 'default') document.body.classList.add('scheme-' + name);
+          btns.forEach(b => b.classList.toggle('active', b.dataset.scheme === (name || 'default')));
+        }
+        btns.forEach(b => b.addEventListener('click', () => {
+          const scheme = b.dataset.scheme;
+          applyScheme(scheme);
+          try{ localStorage.setItem(storageKey, scheme); } catch(e){}
+        }));
+        try{
+          const saved = localStorage.getItem(storageKey) || 'default';
+          applyScheme(saved);
+        }catch(e){ applyScheme('default'); }
+      })();
+    </script>
+  </body>
+</html>

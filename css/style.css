@@ -1,0 +1,241 @@
+/* VIM-like light/default colorscheme (not dark mode) */
+:root{
+  /* Core UI colors */
+  --bg: #ffffff;          /* page background */
+  --panel: #f6f6f6;       /* panel / buffer background */
+  --status-bg: #eaeaea;   /* status bar bg */
+  --kbd-bg: #f0f0f0;      /* kbd background */
+  
+  /* Editor chrome colors */
+  --line-number: #666666; /* line numbers in gutter */
+  --tilde: #999999;       /* ~ markers for empty lines */
+  
+  /* Syntax colors */
+  --text1: #008000;       /* comments - green */
+  --text2: #0000ff;       /* keywords/functions - blue */
+  --text3: #800000;       /* values/strings - maroon */
+  --text4: #7951a9;       /* types - purple */
+  
+  /* UI text colors */
+  --text: #000000;        /* primary text */
+  --muted: #6a6a6a;       /* secondary text */
+  --accent: var(--text2); /* links (matches keywords) */
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, 'Courier New', monospace;min-height:900px}
+.vim-window{max-width:1600px;margin:40px auto;border:1px solid #dcdcdc;border-radius:6px;overflow:hidden;background:var(--panel)}
+.titlebar,
+.statusbar {
+  background: linear-gradient(90deg,#f3f3f3,#eef6ff);
+  color: var(--muted);
+  font-size: 13px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.titlebar { border-bottom: 1px solid #e0e0e0; }
+.statusbar { border-top: 1px solid #e0e0e0; }
+.statusbar .mode{font-weight:700}
+.content p{color:var(--text);line-height:1.5}
+a{color:var(--accent)}
+.comment{color:var(--comment);font-style:italic}
+kbd{background:var(--kbd-bg);border-radius:4px;padding:2px 6px;border:1px solid #d0d0d0;color:#111}
+
+/* Small responsive tweak */
+@media (max-width:640px){.vim-window{margin:18px;}.file-list{flex-direction:column}}
+
+/* Editor gutter + help alignment */
+.editor{display:flex;align-items:flex-start;margin-top:12px;font-family:ui-monospace, Consolas, 'Liberation Mono', monospace}
+.gutter{width:48px;padding:0px 4px 6px 0;color:var(--muted);text-align:right;font-size:14px;line-height:24px}
+.gutter .ln{display:block;color:var(--line-number);height:24px}
+.gutter .tilde{display:block;color:var(--tilde);height:24px}
+.help{flex:1;padding:0px 16px;font-size:14px}
+.help p{margin:0;line-height:24px;white-space:pre}
+
+/* About page avatar positioned top-right inside the help area */
+.about-avatar{position:absolute;right:18px;top:6px;width:96px}
+.avatar-img{width:96px;height:96px;object-fit:cover;border-radius:6px;border:1px solid rgba(0,0,0,0.06)}
+
+/* make sure help area is positioned relatively so avatar can be absolute */
+.help{position:relative}
+
+/* scheme buttons in statusbar */
+.modes{display:flex;gap:6px;align-items:center}
+.scheme-btn{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:4px 8px;border-radius:4px;font-family:inherit;color:var(--text);cursor:pointer}
+.scheme-btn.active{background:var(--accent);color:#fff;border-color:transparent}
+.scheme-btn:focus{outline:2px solid rgba(0,0,0,0.08)}
+
+/* Syntax token classes */
+.tok-comment{color:var(--text1);font-style:italic}
+.tok-keyword{color:var(--text2);font-weight:600}
+.tok-value{color:var(--text3)}
+.tok-type{color:var(--text4);font-weight:600}
+
+/* Code-like links inside help use value color */
+.help a{color:var(--text3);text-decoration:none}
+.help a:hover{text-decoration:underline}
+
+/* Desert colorscheme (warm) */
+body.scheme-desert{
+  /* Core UI colors */
+  --bg:#474747;
+  --panel:#333333;
+  --status-bg:#5a5a5a;
+  --kbd-bg:#b8da5a;
+  
+  /* Editor chrome colors */
+  --line-number: #daa520;
+  --tilde: #add8e6;
+  
+  /* Syntax colors */
+  --text1: #2fc7cc;      /* comments - olive */
+  --text2: #d65a00;      /* keywords - orange */
+  --text3: #e060cf;      /* values - brown */
+  --text4: #c08a3d;      /* types - sandy */
+  
+  /* UI text colors */
+  --text: #d3d3d3;
+  --muted: #7a7a7a;
+  --accent: #a73333;
+}
+
+/* Industry colorscheme (cool/blue) */
+body.scheme-industry{
+  /* Core UI colors */
+  --bg:#f3f6f8;
+  --panel:#ffffff;
+  --status-bg:#e6eef6;
+  --kbd-bg:#f0f4f8;
+  
+  /* Editor chrome colors */
+  --line-number: #6b7280;
+  --tilde: #9ca3af;
+  
+  /* Syntax colors */
+  --text1: #007777;      /* comments - teal */
+  --text2: #0066cc;      /* keywords - blue */
+  --text3: #6b46c1;      /* values - purple */
+  --text4: #9b59b6;      /* types - magenta */
+  
+  /* UI text colors */
+  --text: #0b1a26;
+  --muted: #6b7280;
+  --accent: var(--text2);
+}
+
+@media (max-width: 640px) {
+  .vim-window {
+    max-width: 100vw;
+    margin: 4px;
+    border-radius: 0;
+    box-shadow: none;
+    min-width: 0;
+  }
+  .titlebar, .statusbar {
+    font-size: 12px;
+    padding: 6px 6px;
+    flex-direction: row;
+    align-items: center;
+  }
+  .titlebar span.left, .statusbar span.left {
+    flex: 1;
+    text-align: left;
+  }
+  .titlebar span.right, .statusbar span.right {
+    flex: 1;
+    text-align: right;
+  }
+  .titlebar span.center, .statusbar span.center {
+    display: none;
+  }
+  .buffer {
+    padding: 8px 2px;
+    min-height: 0;
+  }
+  .editor {
+    flex-direction: row;
+    margin-top: 4px;
+    font-size: 13px;
+  }
+  .gutter {
+    width: 32px;
+    padding: 4px 0 4px 0;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .gutter .ln, .gutter .tilde {
+    height: 20px;
+    padding-right: 4px;
+  }
+  .help {
+    padding: 4px 4px 4px 8px;
+    font-size: 13px;
+  }
+  .about-avatar{right:8px;top:6px;width:72px}
+  .avatar-img{width:72px;height:72px}
+  .help p {
+    line-height: 20px;
+    padding: 0;
+    margin: 0 0 6px 0;
+  }
+  .modes {
+    gap: 2px;
+    font-size: 12px;
+  }
+  .scheme-btn {
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+}
+
+/* Gallery grid for photo thumbnails with varied tile sizes */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  grid-auto-rows: max-content;
+  grid-auto-flow: dense;
+  gap: 0;
+  row-gap: 0;
+  column-gap: 0;
+  margin-top: 0;
+  justify-content: center;
+}
+.gallery-item {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+/* Gallery images: show at natural size, never stretch up */
+.gallery-item img {
+  display: block;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  border: none;
+  margin: 0;
+}
+/* Responsive: stack on mobile */
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    justify-content: center;
+  }
+}
+.gallery-item{display:block;border-radius:6px;overflow:hidden;background:var(--panel);display:flex;flex-direction:column;margin:0}
+.gallery-item img{display:block;max-width:100%;height:auto;border-radius:6px;border:1px solid rgba(0,0,0,0.06)}
+.gallery-item .caption{padding:8px 6px 10px 6px;font-size:13px;color:var(--muted);background:transparent;min-height:36px}
+
+/* helper classes when JS sets wide tiles */
+.gallery-item.wide{grid-column:span 2}
+.gallery-item.wider{grid-column:span 3}
+/* span full row (used for bottom tile) */
+.gallery-item.full{grid-column:span 4}
+
+@media (max-width:640px){
+  .gallery-grid{grid-template-columns:repeat(2,1fr);gap:6px}
+  .gallery-item.wide, .gallery-item.wider{grid-column:span 1}
+}

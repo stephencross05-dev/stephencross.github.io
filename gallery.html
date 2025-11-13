@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>gallery — stephen@cave</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div class="vim-window">
+      <div class="titlebar">
+        <span class="left">HP-LNX@stephens_cave:~</span>
+        <span class="center">- /home/stephen/gallery.md</span>
+        <span class="right">VIM 8.2</span>
+      </div>
+      <main class="buffer">
+        <div class="editor">
+          <aside class="gutter" aria-hidden="true">
+            <span class="ln">1</span>
+            <span class="ln">2</span>
+            <span class="ln">3</span>
+            <span class="ln">4</span>
+            <span class="ln">5</span>
+            <span class="ln">6</span>
+            <span class="tilde">~</span>
+            <span class="tilde">~</span>
+            <span class="tilde">~</span>
+          </aside>
+          <div class="help">
+            <p><span class="tok-comment">// Gallery ... Im still working on this page </span></p>
+            <p><span class="tok-comment">/* Heres a couple photos showing who I am, as well as some of my hobbies */</p>
+            <p class="hint">/* <a href="about.html">Back</a> */</p>
+
+            <div class="gallery-grid">
+                 <!-- Row 1 -->
+                 <figure class="gallery-item"><img src="images/IMG_1720.JPG" alt="Headshot" loading="lazy"></figure>
+                 <figure class="gallery-item"><img src="images/DSC01140_Original.webp" alt="Podium Picture" loading="lazy"></figure>
+                 <!-- Row 2 -->
+                 <figure class="gallery-item"><img src="images/IMG_0442.webp" alt="Running" loading="lazy"></figure>
+                 <figure class="gallery-item"><img src="images/angel.webp" alt="Angel sculpture" loading="lazy"></figure>
+                 <figure class="gallery-item"><img src="images/IMG_6693.webp" alt="Racecar picture" loading="lazy"></figure>
+                 <figure class="gallery-item"><img src="images/breadboard.webp" alt="breadboard" loading="lazy"></figure>
+                 <!-- Row 3 -->
+                 <figure class="gallery-item"><img src="images/football.webp" alt="football game" loading="lazy"></figure>
+                 <figure class="gallery-item"><img src="images/skiing.webp" alt="Skiing" loading="lazy"></figure>
+                 <figure class="gallery-item"><img src="images/gt40.webp" alt="GT40" loading="lazy"></figure>
+                 <figure class="gallery-item"><img src="images/daytona.webp" alt="Daytona" loading="lazy"></figure>
+
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="statusbar">
+        <div class="modes" role="group" aria-label="Color scheme">
+          <button class="scheme-btn" data-scheme="default">Default</button>
+          <button class="scheme-btn" data-scheme="desert">Desert</button>
+          <button class="scheme-btn" data-scheme="industry">Industry</button>
+        </div>
+        <span class="file">/home/stephen/gallery.md</span>
+        <span class="pos">Ln 1, Col 1</span>
+      </div>
+    </div>
+
+    <script>
+      // copy of color scheme switcher so theme persists across pages
+      (function(){
+        const btns = Array.from(document.querySelectorAll('.scheme-btn'));
+        const storageKey = 'site:schema';
+        function applyScheme(name){
+          document.body.classList.remove('scheme-default','scheme-desert','scheme-industry');
+          if (name && name !== 'default') document.body.classList.add('scheme-' + name);
+          btns.forEach(b => b.classList.toggle('active', b.dataset.scheme === (name || 'default')));
+        }
+        btns.forEach(b => b.addEventListener('click', () => {
+          const scheme = b.dataset.scheme;
+          applyScheme(scheme);
+          try{ localStorage.setItem(storageKey, scheme); } catch(e){}
+        }));
+        try{
+          const saved = localStorage.getItem(storageKey) || 'default';
+          applyScheme(saved);
+        }catch(e){ applyScheme('default'); }
+      })();
+    </script>
+    <script>
+      // Gallery layout: compute grid spans based on natural image size and persist editable captions.
+      // Also clamp the grid gap so it is never larger than the titlebar height.
+      (function(){
+        const grid = document.querySelector('.gallery-grid');
+        if (!grid) return;
+
+        const storageKey = 'gallery:captions';
+        let captionsStore = {};
+        try{ captionsStore = JSON.parse(localStorage.getItem(storageKey) || '{}'); }catch(e){ captionsStore = {}; }
+
+        const items = Array.from(grid.querySelectorAll('.gallery-item'));
+
+        function adjustGapToHeader(){
+          const header = document.querySelector('.titlebar');
+          if (!header) return;
+          const headerH = Math.round(header.getBoundingClientRect().height) || 0;
+          const cs = getComputedStyle(grid);
+          // grid gap may be declared as 'gap' or 'grid-row-gap'
+          const gapVal = parseFloat(cs.getPropertyValue('gap')) || parseFloat(cs.getPropertyValue('grid-row-gap')) || 0;
+          // if current gap is greater than header height, clamp it
+          if (gapVal > headerH) {
+            grid.style.gap = headerH + 'px';
+          } else {
+            // remove inline gap override if it's safe to use stylesheet value
+            if (grid.style.gap) grid.style.gap = '';
+          }
+        }
+
+        function applyLayout(){
+          adjustGapToHeader();
+          const rowHeight = parseInt(getComputedStyle(grid).getPropertyValue('grid-auto-rows')) || 8;
+          items.forEach((fig)=>{
+            const img = fig.querySelector('img');
+            if (!img) return;
+            // if image not yet loaded, wait and retry
+            if (!img.naturalWidth || !img.naturalHeight){
+              img.addEventListener('load', applyLayout, {once:true});
+              return;
+            }
+            const w = img.naturalWidth, h = img.naturalHeight;
+            const ratio = w / h;
+            // choose column span based on aspect ratio
+            fig.classList.remove('wide','wider');
+            if (ratio > 1.6) fig.classList.add('wider');
+            else if (ratio > 1.15) fig.classList.add('wide');
+
+            // set row span so item height matches image natural height
+            const span = Math.max(1, Math.ceil((h) / rowHeight));
+            fig.style.gridRowEnd = 'span ' + span;
+          });
+        }
+
+        // captions: load saved or keep placeholder, save on blur
+        items.forEach(fig=>{
+          const cap = fig.querySelector('.caption');
+          if (!cap) return;
+          const fname = cap.dataset.filename;
+          if (fname && captionsStore[fname]) cap.textContent = captionsStore[fname];
+          // save on blur
+          cap.addEventListener('blur', ()=>{
+            try{
+              captionsStore[fname || cap.dataset.filename || ('idx'+Math.random())] = cap.textContent.trim();
+              localStorage.setItem(storageKey, JSON.stringify(captionsStore));
+            }catch(e){}
+          });
+          // Enter finishes editing
+          cap.addEventListener('keydown', (e)=>{
+            if (e.key === 'Enter') { e.preventDefault(); cap.blur(); }
+          });
+        });
+
+        // initial layout pass
+        applyLayout();
+        // relayout on window resize to keep spans reasonable and re-check header height
+        window.addEventListener('resize', () => { applyLayout(); });
+      })();
+    </script>
+  </body>
+</html>
