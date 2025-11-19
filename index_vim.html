@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>stephen@cave:~ — vim</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<div class="vim-window">
+			<div class="titlebar">
+				<span class="left">HP-LNX@stephens_cave:~</span>
+				<span class="center">- /home/stephen/README.md</span>
+				<span class="right">VIM 8.2</span>
+			</div>
+
+			<main class="buffer">
+				<!-- Editor-like area: gutter at left with line numbers and tildes, help content to the right -->
+				<div class="editor">
+					<aside class="gutter" aria-hidden="true">
+						<!-- visible line numbers for the active area -->
+						<span class="ln">1</span>
+						<span class="ln">2</span>
+						<span class="ln">3</span>
+						<span class="ln">4</span>
+						<span class="ln">5</span>
+						<span class="ln">6</span>
+						<span class="ln">7</span>
+						<span class="ln">8</span>
+						<span class="ln">9</span>
+						<span class="ln">10</span>
+						<span class="ln">11</span>
+						<span class="ln">12</span>
+						<span class="ln">13</span>
+						<span class="ln">14</span>
+						<span class="ln">15</span>
+						<span class="ln">16</span>
+						<span class="ln">17</span>
+						<span class="ln">18</span>
+						<span class="ln">19</span>
+						<span class="ln">20</span>
+						<span class="ln">21</span>
+						<span class="ln">22</span>
+						<!-- tildes to indicate empty lines like vim -->
+						<span class="tilde">~</span>
+						<span class="tilde">~</span>
+						<span class="tilde">~</span>
+					</aside>
+
+					<div class="help">
+						<p><span class="tok-comment">/*</span></p>
+						<p><span class="tok-comment">  Welcome to Stephen's Cave </span></p>
+						<p><span class="tok-comment">  A comprehensive record of my projects and professional development in Electrical Engineering</span></p>
+						<p><span class="tok-comment">*/</span></p>
+						<p> </p>
+						<p><span class="tok-comment">  // Click on a header file </span></p>
+						<p><span class="tok-preproc">#define</span> <a href="about.html"><span class="tok-value">"about.html"</span></a></p>
+						<p><span class="tok-preproc">#define</span> <a href="projects.html"><span class="tok-value">"projects.html"</span></a></p>
+						<p><span class="tok-preproc">#define</span> <a href="professional.html"><span class="tok-value">"professional.html"</span></a></p>
+						<p> </p>
+						<p><span class="tok-keyword">while</span>(<span class="tok-type tok-value">true</span>) <span class="tok-type">{</span></p>
+							<p style="padding-left:2em"><span class="tok-keyword">std::cout</span> &lt;&lt; <span class="tok-value">" A quick introduction: "</span> &lt;&lt; <span class="tok-keyword">std::endl</span>;</p>
+							<p style="padding-left:2em"><span class="tok-keyword">ostream</span> <span class="tok-type">outputFile</span>(<span class="tok-value">"introduction.txt"</span>, <span class="tok-keyword">IOS::out</span>);</p>
+							<p> </p>
+							<p style="padding-left:2em">outputFile &lt;&lt; <span class="tok-value">" Hello, I am a third year Electrical Engineering student at Georgia Tech. 
+								I will be graduating in the spring of 2027 and am pursuing a career in microwave engineering.  In my free time I row for GT Crew.  
+								I also enjoy working on electronics projects, and fixing my grassroots racecar.  To destress I like to spend time outdoors rock climbing and trail running,
+								and of course hanging out with friends."</span>;</p>
+								<p>};</p>
+							<p style="padding-left:2em">outputFile.close();</p>
+							<p><span class="tok-type">}</span></p>
+					</div>
+				</div>
+			</main>
+
+			<div class="statusbar">
+				<div class="modes" role="group" aria-label="Color scheme">
+					<button class="scheme-btn" data-scheme="default">Default</button>
+					<button class="scheme-btn" data-scheme="desert">Desert</button>
+					<button class="scheme-btn" data-scheme="industry">Industry</button>
+				</div>
+				<span class="left"></span>
+				<span class="center"></span>
+				<span class="right">Ln 1, Col 1</span>
+			</div>
+		</div>
+
+		<script>
+			// color scheme switcher: toggles body class and persists choice in localStorage
+			(function(){
+				const btns = Array.from(document.querySelectorAll('.scheme-btn'));
+				const storageKey = 'site:schema';
+
+				function applyScheme(name){
+					document.body.classList.remove('scheme-default','scheme-desert','scheme-industry');
+					if (name && name !== 'default') document.body.classList.add('scheme-' + name);
+					// update active button UI
+					btns.forEach(b => b.classList.toggle('active', b.dataset.scheme === (name || 'default')));
+				}
+
+				btns.forEach(b => b.addEventListener('click', () => {
+					const scheme = b.dataset.scheme;
+					applyScheme(scheme);
+					try{ localStorage.setItem(storageKey, scheme); } catch(e){}
+				}));
+
+				// init from storage or default
+				try{
+					const saved = localStorage.getItem(storageKey) || 'default';
+					applyScheme(saved);
+				}catch(e){ applyScheme('default'); }
+			})();
+		</script>
+	</body>
+</html>

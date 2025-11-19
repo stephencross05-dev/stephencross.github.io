@@ -1,3 +1,21 @@
+/* Large font for sub pages (not index.html) */
+.large-font .help, .large-font .buffer, .large-font .editor {
+  font-size: 19px;
+}
+.large-font .gutter {
+  font-size: 20px;
+  line-height: 32px;
+}
+.large-font .gutter .ln, .large-font .gutter .tilde {
+  height: 32px;
+}
+.large-font .help p {
+  line-height: 32px;
+}
+.large-font .gallery-item .caption {
+  font-size: 18px;
+  min-height: 40px;
+}
 /* VIM default colorscheme */
 :root{
   --preproc: #e67e22;
