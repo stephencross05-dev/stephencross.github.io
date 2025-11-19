@@ -1,116 +1,473 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>stephen@cave:~ — vim</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
+    <title>stephen@cave:~ — portfolio</title>
+    <style>
+        /* VIM default colorscheme */
+        :root{
+          --preproc: #e67e22;
+          --button-text: #000000;
+          --bg: #ffffff;
+          --panel: #ebebeb;
+          --status-bg: #e9e6e6;
+          --kbd-bg: #e688885b;
+          --line-number: #bd7313;
+          --tilde: #5eb3f0;
+          --text1: #0f3e9b;
+          --text2: #bd7313;
+          --text3: #bb2727;
+          --text4: #3aaecf;
+          --text: #000000;
+          --muted: #6a6a6a;
+          --accent: #c2c0c2;
+        }
+
+        body.scheme-desert{
+          --preproc: #ffb84d;
+          --button-text: #0a0a0a;
+          --bg:#47454c;
+          --panel:#2b2727;
+          --status-bg:#b8b5b2;
+          --kbd-bg:#b8da5a;
+          --line-number: #e4dc37;
+          --tilde: #80b4e5;
+          --text1: #2fc7cc;
+          --text2: #f4cf7a;
+          --text3: #f2b1a1;
+          --text4: #ade147;
+          --text: #ffffff;
+          --muted: #3e3d3d;
+          --accent: #d0b73d;
+        }
+
+        body.scheme-industry{
+          --preproc: #47e313;
+          --bg:#3a3a3a;
+          --panel:#000000;
+          --status-bg:#757575;
+          --kbd-bg:#f0f4f8;
+          --line-number: #7e8187;
+          --tilde: #85b2ff;
+          --text1: #91ffff;
+          --text2: #c7d130;
+          --text3: #ffffff;
+          --text4: #a8d4ff;
+          --text: #dce9f9;
+          --muted: #000000;
+          --accent: #6daae8;
+        }
+
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{
+            background:var(--bg);
+            color:var(--text);
+            font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, 'Courier New', monospace;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        .vim-window{
+            max-width:1600px;
+            margin:40px auto;
+            border:1px solid #dcdcdc;
+            border-radius:6px;
+            overflow:hidden;
+            background:var(--panel);
+            transition: background 0.3s;
+        }
+        
+        .titlebar, .statusbar {
+            background: var(--status-bg);
+            color: var(--muted);
+            font-size: 13px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        .titlebar { border-bottom: 1px solid #e0e0e0; }
+        .statusbar { border-top: 1px solid #e0e0e0; }
+        
+        .buffer {
+            min-height: 70vh;
+            padding: 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: var(--text2);
+            font-weight: 600;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.3em;
+            color: var(--text1);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .typing-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.0em;
+            background: var(--text2);
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        
+        .profile-section.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .profile-image {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            border: 4px solid var(--text2);
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .profile-text {
+            max-width: 500px;
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        
+        /* Navigation Cards */
+        .nav-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .nav-card {
+            background: var(--bg);
+            border: 2px solid var(--text2);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        
+        .nav-card.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .nav-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: var(--text3);
+        }
+        
+        .nav-card h3 {
+            color: var(--text2);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .nav-card p {
+            color: var(--text);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        
+        .nav-card a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--text2);
+            color: var(--panel);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .nav-card a:hover {
+            background: var(--text3);
+        }
+        
+        /* Projects Highlight */
+        .projects-highlight {
+            background: var(--bg);
+            border: 3px solid var(--text4);
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s, transform 0.8s;
+        }
+        
+        .projects-highlight.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .projects-highlight h2 {
+            color: var(--text4);
+            font-size: 2em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .project-item {
+            background: var(--panel);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--text2);
+        }
+        
+        .project-item h4 {
+            color: var(--text2);
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        
+        .project-item p {
+            color: var(--text);
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        /* Scheme buttons */
+        .modes{display:flex;gap:6px;align-items:center}
+        .scheme-btn{
+            background:transparent;
+            border:1px solid rgba(0,0,0,0.06);
+            padding:4px 8px;
+            border-radius:4px;
+            font-family:inherit;
+            color:var(--button-text);
+            cursor:pointer;
+            transition: all 0.3s;
+        }
+        .scheme-btn.active{
+            background:var(--accent);
+            color:var(--button-text);
+            border-color:transparent;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .vim-window {
+                margin: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2em;
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .nav-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .projects-highlight {
+                padding: 20px;
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
     <div class="vim-window">
-      <div class="titlebar">
-        <span class="left">HP-LNX@stephens_cave:~</span>
-        <span class="center">- /home/stephen/README.md</span>
-        <span class="right">VIM 8.2</span>
-      </div>
-
-      <main class="buffer">
-        <!-- Editor-like area: gutter at left with line numbers and tildes, help content to the right -->
-        <div class="editor">
-          <aside class="gutter" aria-hidden="true">
-            <!-- visible line numbers for the active area -->
-            <span class="ln">1</span>
-            <span class="ln">2</span>
-            <span class="ln">3</span>
-            <span class="ln">4</span>
-            <span class="ln">5</span>
-            <span class="ln">6</span>
-            <span class="ln">7</span>
-            <span class="ln">8</span>
-            <span class="ln">9</span>
-            <span class="ln">10</span>
-            <span class="ln">11</span>
-            <span class="ln">12</span>
-            <span class="ln">13</span>
-            <span class="ln">14</span>
-            <span class="ln">15</span>
-            <span class="ln">16</span>
-            <span class="ln">17</span>
-            <span class="ln">18</span>
-            <span class="ln">19</span>
-            <span class="ln">20</span>
-            <span class="ln">21</span>
-            <span class="ln">22</span>
-            <!-- tildes to indicate empty lines like vim -->
-            <span class="tilde">~</span>
-            <span class="tilde">~</span>
-            <span class="tilde">~</span>
-          </aside>
-
-          <div class="help">
-            <p><span class="tok-comment">/*</span></p>
-            <p><span class="tok-comment">  Welcome to Stephen's Cave </span></p>
-            <p><span class="tok-comment">  A comprehensive record of my projects and professional development in Electrical Engineering</span></p>
-            <p><span class="tok-comment">*/</span></p>
-            <p> </p>
-            <p><span class="tok-comment">  // Click on a header file </span></p>
-            <p><span class="tok-preproc">#define</span> <a href="about.html"><span class="tok-value">"about.html"</span></a></p>
-            <p><span class="tok-preproc">#define</span> <a href="projects.html"><span class="tok-value">"projects.html"</span></a></p>
-            <p><span class="tok-preproc">#define</span> <a href="professional.html"><span class="tok-value">"professional.html"</span></a></p>
-            <p> </p>
-            <p><span class="tok-keyword">while</span>(<span class="tok-type tok-value">true</span>) <span class="tok-type">{</span></p>
-              <p style="padding-left:2em"><span class="tok-keyword">std::cout</span> &lt;&lt; <span class="tok-value">" A quick introduction: "</span> &lt;&lt; <span class="tok-keyword">std::endl</span>;</p>
-              <p style="padding-left:2em"><span class="tok-keyword">ostream</span> <span class="tok-type">outputFile</span>(<span class="tok-value">"introduction.txt"</span>, <span class="tok-keyword">IOS::out</span>);</p>
-              <p> </p>
-              <p style="padding-left:2em">outputFile &lt;&lt; <span class="tok-value">" Hello, I am a third year Electrical Engineering student at Georgia Tech. 
-                I will be graduating in the spring of 2027 and am pursuing a career in microwave engineering.  In my free time I row for GT Crew.  
-                I also enjoy working on electronics projects, and fixing my grassroots racecar.  To destress I like to spend time outdoors rock climbing and trail running,
-                and of course hanging out with friends."</span>;</p>
-                <p>};</p>
-              <p style="padding-left:2em">outputFile.close();</p>
-              <p><span class="tok-type">}</span></p>
-          </div>
+        <div class="titlebar">
+            <span class="left">HP-LNX@stephens_cave:~</span>
+            <span class="center">- /home/stephen/portfolio.md</span>
+            <span class="right">VIM 8.2</span>
         </div>
-      </main>
 
-      <div class="statusbar">
-        <div class="modes" role="group" aria-label="Color scheme">
-          <button class="scheme-btn" data-scheme="default">Default</button>
-          <button class="scheme-btn" data-scheme="desert">Desert</button>
-          <button class="scheme-btn" data-scheme="industry">Industry</button>
+        <main class="buffer">
+            <!-- Hero Section -->
+            <div class="hero">
+                <h1>Stephen Cross<span class="typing-cursor"></span></h1>
+                <p class="subtitle">// Electrical Engineering student interested in telecommunications and RF systems</p>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <img src="images/IMG_1720.JPG" alt="Stephen Cross" class="profile-image">
+                <div class="profile-text">
+                    <p>Hello, I am a third year Electrical Engineering student at Georgia Tech. I will be graduating in the spring of 2027 and am pursuing a career in microwave engineering. In my free time I row for GT Crew. I also enjoy working on electronics projects, and fixing my grassroots racecar. To destress I like to spend time outdoors rock climbing and trail running, and of course hanging out with friends.</p>
+                </div>
+            </div>
+
+            <!-- Navigation Cards -->
+            <div class="nav-cards">
+                <div class="nav-card">
+                    <h3>// About Me</h3>
+                    <p>Learn more about my background, education, and interests in electrical engineering and beyond.</p>
+                    <a href="about.html">Explore →</a>
+                </div>
+                
+                <div class="nav-card">
+                    <h3>// Projects</h3>
+                    <p>Check out my technical projects ranging from RF systems to embedded electronics.</p>
+                    <a href="projects.html">View Projects →</a>
+                </div>
+                
+                <div class="nav-card">
+                    <h3>// Experience</h3>
+                    <p>My professional journey including Amazon Project Kuiper and motorsports engineering.</p>
+                    <a href="professional.html">See Resume →</a>
+                </div>
+            </div>
+
+            <!-- Projects Highlight -->
+            <div class="projects-highlight">
+                <h2>Featured Projects</h2>
+                <div class="project-grid">
+                    <div class="project-item">
+                        <h4>Compact Antenna Test Range</h4>
+                        <p>Built a specialized CATR for customer terminal testing with anechoic chamber, positioner gimbal, and parabolic reflector at Amazon Project Kuiper.</p>
+                    </div>
+                    
+                    <div class="project-item">
+                        <h4>RF Characterization System</h4>
+                        <p>Developed automated testing systems using Keysight and R&S equipment for EIRP, EVM, SNR, and RSSI measurements via SCPI commands.</p>
+                    </div>
+                    
+                    <div class="project-item">
+                        <h4>Race Car Electronics</h4>
+                        <p>Designed and troubleshot mil-spec wire looms for vehicle management systems including Cosworth, MoTec, and AEM ECUs.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="statusbar">
+            <div class="modes" role="group" aria-label="Color scheme">
+                <button class="scheme-btn" data-scheme="default">Default</button>
+                <button class="scheme-btn" data-scheme="desert">Desert</button>
+                <button class="scheme-btn" data-scheme="industry">Industry</button>
+            </div>
+            <span class="right">Ln 1, Col 1</span>
         </div>
-        <span class="left"></span>
-        <span class="center"></span>
-        <span class="right">Ln 1, Col 1</span>
-      </div>
     </div>
 
     <script>
-      // color scheme switcher: toggles body class and persists choice in localStorage
-      (function(){
-        const btns = Array.from(document.querySelectorAll('.scheme-btn'));
-        const storageKey = 'site:schema';
+        // Color scheme switcher
+        (function(){
+            const btns = Array.from(document.querySelectorAll('.scheme-btn'));
+            const storageKey = 'site:schema';
 
-        function applyScheme(name){
-          document.body.classList.remove('scheme-default','scheme-desert','scheme-industry');
-          if (name && name !== 'default') document.body.classList.add('scheme-' + name);
-          // update active button UI
-          btns.forEach(b => b.classList.toggle('active', b.dataset.scheme === (name || 'default')));
-        }
+            function applyScheme(name){
+                document.body.classList.remove('scheme-default','scheme-desert','scheme-industry');
+                if (name && name !== 'default') document.body.classList.add('scheme-' + name);
+                btns.forEach(b => b.classList.toggle('active', b.dataset.scheme === (name || 'default')));
+            }
 
-        btns.forEach(b => b.addEventListener('click', () => {
-          const scheme = b.dataset.scheme;
-          applyScheme(scheme);
-          try{ localStorage.setItem(storageKey, scheme); } catch(e){}
-        }));
+            btns.forEach(b => b.addEventListener('click', () => {
+                const scheme = b.dataset.scheme;
+                applyScheme(scheme);
+                try{ localStorage.setItem(storageKey, scheme); } catch(e){}
+            }));
 
-        // init from storage or default
-        try{
-          const saved = localStorage.getItem(storageKey) || 'default';
-          applyScheme(saved);
-        }catch(e){ applyScheme('default'); }
-      })();
+            try{
+                const saved = localStorage.getItem(storageKey) || 'default';
+                applyScheme(saved);
+            }catch(e){ applyScheme('default'); }
+        })();
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = [
+                '.profile-section',
+                ...document.querySelectorAll('.nav-card'),
+                '.projects-highlight'
+            ];
+
+            elementsToAnimate.forEach((el, index) => {
+                const element = typeof el === 'string' ? document.querySelector(el) : el;
+                if (element) {
+                    setTimeout(() => {
+                        observer.observe(element);
+                    }, index * 100);
+                }
+            });
+        });
     </script>
-  </body>
+</body>
 </html>
-
